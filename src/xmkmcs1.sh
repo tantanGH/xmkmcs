@@ -2,7 +2,7 @@
 #
 #   xmkmcs1.sh - X680x0 MACS data cross builder #1
 #
-#   version 2023.06.17 tantan
+#   version 2023.06.18 tantan
 #
 #   Prerequisites:
 #     - Linux/macOS or similar OS environment (WSL2 on Windows may also work?)
@@ -11,20 +11,22 @@
 #     - unix2dos (dos2unix)
 #     - lze
 #     - macs_sch.h
+#     - Python Pillow library (pip install pillow)
 #
 #   How to use:
 #     1. Create a new project folder.
 #     2. Copy xmkmcs1.sh, gif2tx.py, pcm2adpcm.py, xmkmcs2.bat, macs_sch.h to the folder.
-#     3. Edit paramters in xmkmcs1.sh.
-#     4. Run xmkmcs.sh.
-#     5. Run xmkmcs2.bat on XEiJ 060turbo mode. (060turbo.sys -xm with >=256MB high memory)
+#     3. Edit parameters in xmkmcs1.sh.
+#     4. Run xmkmcs1.sh.
+#     5. Update macs_src.s on XEiJ.
+#     6. Run xmkmcs2.bat on XEiJ 060turbo mode. (060turbo.sys -xm with 256MB high memory)
 #
 
 set -u
 
-python_exec=`which python`
+python_exec=`which python3`
 if [ $? -ne 0 ]; then
-  python_exec=`which python3`
+  python_exec=`which python`
   if [ $? -ne 0 ]; then
     echo "python is not installed."
     exit 1
@@ -68,7 +70,8 @@ fi
 #      - movie file (avi/mov/mp4/m4v/etc.)
 #    output:
 #      - animated GIF file
-#      - 16bit (big endian) PCM file
+#      - 16bit (big endian) PCM file at 48000/44100/22050Hz
+#      - 16bit (big endian) PCM file at 15625Hz
 #
 function stage1() {
 
@@ -77,19 +80,22 @@ function stage1() {
 
   ffopt_paletteuse="paletteuse=dither=bayer:bayer_scale=${bayer_scale}"
 
+  # movie to gif,pcm and pcm2
   $ffmpeg_exec -y \
     $source_cut_ss $source_cut_to -i "$source_file" $source_cut_offset $source_cut_length \
     -filter_complex \
     "[0:v] scale=${view_width}:${view_height},split [a][b];[a] palettegen [p];[b][p] ${ffopt_paletteuse}" \
     "$gif_file" \
-    -f s16be -acodec pcm_s16be -filter:a "volume=$pcm_volume" -ar $pcm_freq -ac 2 $source_cut_offset $source_cut_length $pcm_file
+    -f s16be -acodec pcm_s16be -filter:a "volume=$pcm_volume" -ar $pcm_freq -ac 2 $source_cut_offset $source_cut_length $pcm_file \
+    -f s16be -acodec pcm_s16be -filter:a "volume=$pcm_volume" -ar $adpcm_freq -ac 1 $source_cut_offset $source_cut_length $pcm_file2
 
   if [ $? != 0 ]; then
     echo "error: ffmpeg failed."
     exit 1
   fi
 
-  $python_exec $pcm2adpcm $pcm_file $pcm_freq $pcm_channels $adpcm_file
+  # pcm2 to adpcm
+  $python_exec $pcm2adpcm $pcm_file2 $adpcm_freq 1 $adpcm_file $adpcm_freq
   if [ $? != 0 ]; then
     echo "error: adpcm conversion failed."
     exit 1
@@ -113,6 +119,7 @@ function stage2() {
   date
   echo "[STAGE 2] started."
 
+  # gif to tx/tp
   $python_exec $gif2tx -sw $screen_width -sh $screen_height -vw $view_width -vh $view_height $crop_x $crop_y $num_frames "$gif_file"
   if [ $? != 0 ]; then
     echo "error: gif to tx conversion failed."
@@ -291,10 +298,6 @@ num_frames=
 #bayer_scale=4
 bayer_scale=5
 
-# source PCM channels
-#   note: not output channels, this is the source movie file PCM channels
-pcm_channels=2
-
 # output PCM frequency (48000/44100/22050)
 #pcm_freq=48000
 #pcm_freq=44100
@@ -303,9 +306,12 @@ pcm_freq=22050
 # output PCM volume ratio
 pcm_volume=1.0
 
+# output ADPCM frequency
+adpcm_freq=15625
+
 # LZE compression (0:no 1:yes)
-lze_compression=0
-#lze_compression=1
+#lze_compression=0
+lze_compression=1
 
 # temporary gif file name
 gif_file="_wip.gif"
@@ -313,10 +319,13 @@ gif_file="_wip.gif"
 # temporary 16bit pcm file name
 pcm_file="_wip_pcm.dat"
 
+# temporary 16bit pcm file name 2 (for adpcm conversion)
+pcm_file2="_wip_pcm2.dat"
+
 # temporary adpcm file name
 adpcm_file="_wip_adpcm.dat"
 
-# STAGE1 ffmpeg
+# STAGE1 ffmpeg / pcm2adpcm
 stage1
 
 # STAGE2 gif2tx
