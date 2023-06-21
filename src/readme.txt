@@ -1,5 +1,11 @@
-xmkmcs - マルチコア対応クロスプラットフォームMACS data builder 2023.06.18
+xmkmcs - マルチコア対応クロスプラットフォームMACS data builder 2023.06.21
 
+version 2023.06.21
+- 100%raw, 100%lze, raw:lze=50:50の選択ができるようにした
+- 完全固定パレット、完全可変パレット、一部固定パレットの選択ができるようにした
+- 060high の利用をやめて、HIMEM対応版 hlk.r の利用を前提にした
+
+version 2023.06.18
 - 1つのbash script, 2つのpython script, 1つのhuman batchから成るMACS data builder
 - なるべく自動化し、かつなるべくエミュ外でやれることは外でやる方針
 - x68kエミュで実行するのは最後のスケジュールファイルのアセンブル、リンク、makemcsのみ

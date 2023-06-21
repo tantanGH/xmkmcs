@@ -1,3 +1,13 @@
+#
+#  gif2tx.py - animated GIF to tx/tp data converter
+#
+#  version 2023.06.21 by tantan
+#
+#   Prerequisites:
+#     - Python 3
+#     - Pillow library (pip install pillow)
+#
+
 import argparse
 import sys
 import os
