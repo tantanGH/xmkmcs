@@ -1,9 +1,7 @@
-set MACS_NAME=macs_src
-has060 -t . -u %MACS_NAME%.s
+set MACS_NAME=MACSsample
+has060 -t . -u schedule.s
 
-rem update the below line before run (hlk exec name, im folders)
-060high 1
-hlkev -t -r %MACS_NAME% listpcm im00/list00 im01/list01 im02/list02 im03/list03 im04/list04
+rem make sure you install TS16DRVp.x, and use hlk.r evolution patched by TcbnErik/Hau
+hlk.r -t -r -o %MACS_NAME%.r schedule listpcm im00/list00 im01/list01 im02/list02 im03/list03 im04/list04
 
-060high 0
 makemcs %MACS_NAME%

@@ -5,7 +5,7 @@ SET_OFFSET
 USE_DUALPCM 'S22'		
 
 TITLE   'MACS sample'
-COMMENT '256x216 256colors raw'
+COMMENT '256x216 256colors raw:lze=50:50 variable parlettes'
 ;COMMENT '256x216 256colors lze'
 ;COMMENT '384x216 256colors raw'
 ;COMMENT '384x216 256colors lze'
@@ -19,6 +19,8 @@ SET_FPS24
 SET_VIEWAREA_Y 216
 ;SET_VIEWAREA_Y 256
 
+LOOP_WA 100
+
 DRAW_DATA_RP 10000
 
 PCM_PLAY_S22 pcmdat,pcmend-pcmdat
@@ -29,4 +31,7 @@ DRAW_DATA 10001,12145
 
 WAIT 60
 PCM_STOP
+
+LOOPEND_WA
+
 EXIT
