@@ -2,7 +2,7 @@
 #
 #   xmkmcs1.sh - X680x0 MACS data cross builder #1
 #
-#   version 2023.06.20 tantan
+#   version 2023.06.21 tantan
 #
 #   Prerequisites:
 #     - Linux/macOS or similar OS environment (WSL2 on Windows may also work?)
@@ -161,7 +161,7 @@ function stage2a() {
 
   $ffmpeg_exec -y \
     $source_cut_ss $source_cut_to -i "$source_file" $source_cut_offset $source_cut_length \
-    -filter_complex "[0:v] fps=${fps},trim=start_frame=${start_frame}:end_frame=${end_frame2},scale=${view_width}:${view_height} ${palette_filter_fix},setpts=PTS-STARTPTS[v0]" \
+    -filter_complex "[0:v] fps=${fps},trim=start_frame=${start_frame}:end_frame=${end_frame2},scale=${view_width}:${view_height} ${palette_filter},setpts=PTS-STARTPTS[v0]" \
     -map [v0] "_wip_${start_frame}_${end_frame}.gif"
 
   if [ $? != 0 ]; then
@@ -372,7 +372,7 @@ bayer_scale=4
 pcm_freq=22050
 
 # output PCM volume ratio
-pcm_volume=0.8
+pcm_volume=1.0
 
 # output ADPCM frequency
 adpcm_freq=15625
@@ -400,9 +400,9 @@ stage1
 # STAGE2 gif2tx
 stage2
 
-# STAGE2a (optional for palette fix)
-#stage2a(808,1048)
-#stage2a(1784,1954)
+# STAGE2a (optional for fixed palette)
+#stage2a  808 1048
+#stage2a 1784 1954
 
 # STAGE3 lze
 stage3
