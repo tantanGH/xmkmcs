@@ -128,13 +128,7 @@ function stage2() {
   date
   echo "[STAGE 2] started."
 
-  if [ "$variable_palette" == "1" ]; then
-    vp="-vp"
-  else
-    vp=""
-  fi
-
-  $python_exec $gif2tx -sw $screen_width -sh $screen_height -vw $view_width -vh $view_height $crop_x $crop_y $vp "$gif_file"
+  $python_exec $gif2tx -sw $screen_width -sh $screen_height -vw $view_width -vh $view_height $crop_x $crop_y "$gif_file"
   if [ $? != 0 ]; then
     echo "error: gif to tx conversion failed."
     exit 1
@@ -142,6 +136,47 @@ function stage2() {
 
   date
   echo "[STAGE 2] completed."
+}
+
+#
+#  [STAGE 2a (optional)] apply fix palette frames
+#    input:
+#      - movie file
+#      - palette fix start frame number
+#      - palette fix end frame number
+#    output:
+#      - tx(raw) files
+#      - tp files
+#
+function stage2a() {
+
+  start_frame=$1
+  end_frame=$2
+  end_frame2=`expr $end_frame + 30`
+
+  date
+  echo "[STAGE 2a] started for ${start_frame} - ${end_frame}."
+
+  palette_filter=",split [a][b];[a] palettegen=stats_mode=diff [p];[b][p] paletteuse=dither=bayer:bayer_scale=${bayer_scale}"
+
+  $ffmpeg_exec -y \
+    $source_cut_ss $source_cut_to -i "$source_file" $source_cut_offset $source_cut_length \
+    -filter_complex "[0:v] fps=${fps},trim=start_frame=${start_frame}:end_frame=${end_frame2},scale=${view_width}:${view_height} ${palette_filter_fix},setpts=PTS-STARTPTS[v0]" \
+    -map [v0] "_wip_${start_frame}_${end_frame}.gif"
+
+  if [ $? != 0 ]; then
+    echo "error: ffmpeg failed."
+    exit 1
+  fi
+
+  $python_exec $gif2tx -sw $screen_width -sh $screen_height -vw $view_width -vh $view_height $crop_x $crop_y -fs $start_frame -fe $end_frame "_wip_${start_frame}_${end_frame}.gif"
+  if [ $? != 0 ]; then
+    echo "error: gif to tx conversion failed."
+    exit 1
+  fi
+
+  date
+  echo "[STAGE 2a] completed."
 }
 
 #
@@ -364,6 +399,10 @@ stage1
 
 # STAGE2 gif2tx
 stage2
+
+# STAGE2a (optional for palette fix)
+#stage2a(808,1048)
+#stage2a(1784,1954)
 
 # STAGE3 lze
 stage3
