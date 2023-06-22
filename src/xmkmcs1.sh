@@ -2,7 +2,7 @@
 #
 #   xmkmcs1.sh - X680x0 MACS data cross builder #1
 #
-#   version 2023.06.21 tantan
+#   version 2023.06.23 tantan
 #
 #   Prerequisites:
 #     - Linux/macOS or similar OS environment (WSL2 on Windows may also work?)
@@ -236,6 +236,23 @@ function stage3() {
         echo "Tp%i:: .insert Tp%i" >> $list_file
         echo "i=i+1" >> $list_file
         echo ".endm" >> $list_file
+      elif [ "$lze_compression" == "3" ]; then
+        echo "" > $list_file
+        for j in `seq $frame_index_min $frame_index_max`; do
+          echo ".quad" >> $list_file
+          mod=`expr $j % 2`
+          if [ $mod -eq 0 -o $mod -eq 3 ]; then
+            echo "Tx${j}:: .insert Tx${j}.lze" >> $list_file
+          else
+            echo "Tx${j}:: .insert Tx${j}" >> $list_file
+          fi
+        done
+        echo "i=${frame_index_min}" >> $list_file
+        echo ".rept ${num_frames}" >> $list_file
+        echo ".even" >> $list_file
+        echo "Tp%i:: .insert Tp%i" >> $list_file
+        echo "i=i+1" >> $list_file
+        echo ".endm" >> $list_file
       else
         echo "i=${frame_index_min}" > $list_file
         echo ".rept ${num_frames}" >> $list_file
@@ -377,10 +394,11 @@ pcm_volume=1.0
 # output ADPCM frequency
 adpcm_freq=15625
 
-# LZE compression (0:no 1:yes 2:half)
+# LZE compression (0:no 1:yes 2:raw:lze=50:50 3:raw:lze=60:40)
 #lze_compression=0
 #lze_compression=1
 lze_compression=2
+#lze_compression=3
 
 # temporary gif file name
 gif_file="_wip.gif"
