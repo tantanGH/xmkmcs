@@ -1,0 +1,135 @@
+*		LZE DECODE ROUTINE
+*		Copyright (C)1995,2008 GORRY.
+
+
+*************************************************************************
+
+
+Distance	reg	d4
+CopyCount	reg	d5
+BitCount	reg	d6
+BitData		reg	d7
+LZEPtr		reg	a1
+DECODEPtr	reg	a2
+CopyPtr		reg	a3
+
+
+*************************************************************************
+
+
+*		1bitテストを行なう。結果はCyに返る。
+BitTest		macro
+		local	l1
+		dbra	BitCount,l1
+		move.b	(LZEPtr)+,BitData
+		moveq.l	#8-1,BitCount
+	l1:
+		add.b	BitData,BitData
+		endm
+
+*		距離データを１バイト読み出す。
+LoadDistanceB	macro
+		move.b	(LZEPtr)+,Distance
+		endm
+
+*		距離データを１ワード読み出す。
+LoadDistanceW	macro
+		move.b	(LZEPtr)+,Distance
+		lsl.w	#8,Distance
+		move.b	(LZEPtr)+,Distance
+		endm
+
+*		コピーカウントデータを１バイト読み出す。
+LoadCopyCount	macro
+		move.b	(LZEPtr)+,CopyCount
+		endm
+
+*		(CopyPtr)から(DECODEPtr)へ1バイトコピー
+Store		macro
+		move.b	(LZEPtr)+,(DECODEPtr)+
+		endm
+
+*		(DECODEPtr-Distance)から(DECODEPtr)へ(CopyCount)+1バイトコピー
+Copy		macro
+		local	l1
+		lea	(DECODEPtr,Distance.w),CopyPtr
+	l1:
+		move.b	(CopyPtr)+,(DECODEPtr)+
+		dbra	CopyCount,l1
+		endm
+
+
+*************************************************************************
+
+
+PUSHREGS	reg	Distance/CopyCount/BitCount/BitData/LZEPtr/DECODEPtr/CopyPtr
+
+DECODE_LZE::
+*		LZEデータをデコードする。
+*		in	a1	デコード前データへのポインタ
+*			a2	デコード後データへのポインタ
+
+		movem.l	PUSHREGS,-(sp)
+
+		moveq.l	#0,BitCount
+
+DECODE_LZE_lp0::
+DECODE_LZE_1::
+		Store
+
+DECODE_LZE_lp1::
+		BitTest
+		bcs	DECODE_LZE_1
+
+DECODE_LZE_0::
+		moveq.l	#-1,Distance
+		BitTest
+		bcs	DECODE_LZE_01
+DECODE_LZE_00::
+		moveq.l	#0,CopyCount
+		BitTest
+		addx.b	CopyCount,CopyCount
+		BitTest
+		addx.b	CopyCount,CopyCount
+		LoadDistanceB
+DECODE_LZE_00_1::
+		addq.w	#1,CopyCount
+DECODE_LZE_00_2::
+		Copy
+		bra	DECODE_LZE_lp1
+
+DECODE_LZE_01::
+		LoadDistanceW
+		move.w	Distance,CopyCount
+		asr.l	#3,Distance
+		andi.w	#7,CopyCount
+		bne	DECODE_LZE_00_1
+		LoadCopyCount
+		bne	DECODE_LZE_00_2
+
+DECODE_LZE_e::
+		movem.l	(sp)+,PUSHREGS
+		rts
+
+
+*************************************************************************
+
+
+PUSHREGS	reg	LZEPtr/DECODEPtr
+
+_DECODE_LZE::
+*		C用インターフェース。
+*		extern void	DECODE_LZE( unsigned char *in, unsigned char *out );
+
+		movem.l	PUSHREGS,-(sp)
+		move.l	12+0(sp),LZEPtr
+		move.l	12+4(sp),DECODEPtr
+		bsr	DECODE_LZE
+		movem.l	(sp)+,PUSHREGS
+		rts
+
+
+*************************************************************************
+
+
+
