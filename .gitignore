@@ -1,0 +1,10 @@
+.DS_Store
+
+doc
+include
+kflush
+work
+
+lze
+lze/*.o
+lze/lze
