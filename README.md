@@ -26,30 +26,13 @@
 - Linux
 - WSL2 (未確認)
 
-CLIなので、コマンドラインのみの操作となります。
+UNIX-Like OSが対象です。CLIなので、コマンドラインのみの操作となります。
 
 ---
 
 ## Install (ホストOS側)
 
-xdev68k クロスコンパイル環境が既に導入されていれば、手順1,2はスキップしてok。
-
-1. [run68mac](https://github.com/GOROman/run68mac) を導入する。(オリジナルのrun68をWindows専用ではなく、macsOS, Linux, WSL2などでも動作するるようにしたもの)
-
-2. [HAS060.X](http://retropc.net/x68000/software/develop/as/has060/) をダウンロードし、アクセス可能な位置に置いておく。
-
-        /opt/xdev68k/x68k_bin/HAS060.X
-
-3. run68 で HAS060 が使えることを確認。
-
-        $ run68 /opt/xdev68k/x68k_bin/HAS060.X
-        X68k High-speed Assembler v3.09+91 (C) 1990-1994/1996-2023 Y.Nakamura/M.Kamada
-        使用法: has060 [スイッチ] ファイル名
-                -1              絶対ロング→PC間接(-b1と-eを伴う)
-                -8              シンボルの識別長を8バイトにする
-        ...
-
-4. Pythonツール `pcm2adpcm` を導入。
+1. Pythonツール `pcm2adpcm` を導入。
 
         pip install git+https://github.com/tantanGH/pcm2adpcm.git
 
@@ -57,7 +40,7 @@ xdev68k クロスコンパイル環境が既に導入されていれば、手順
 
         pcm2adpcm -h
 
-5. Pythonツール `gif2tx` を導入。
+2. Pythonツール `gif2tx` を導入。
 
         pip install git+https://github.com/tantanGH/gif2tx.git
 
@@ -65,7 +48,7 @@ xdev68k クロスコンパイル環境が既に導入されていれば、手順
 
         gif2tx -h
 
-6. dos2unix を導入。
+3. dos2unix を導入。
 
 macOS:
 
@@ -79,13 +62,44 @@ Linux/WSL2:
 
         unix2dos -h
 
-7. [lze](http://gorry.haun.org/pw/?lze) を導入。
+4. lha を導入。
 
-Makefileを変更してソースからコンパイルしインストールする。gccでのMakefile例は lze/Makefile を参照。
+macOS:
+
+        brew install lha
+
+Linux/WSL2:
+
+        sudo apt-get install lhasa
+
+コマンドラインで `lha` が使えることを確認。
+
+        lha
+
+
+5. [lze](http://gorry.haun.org/pw/?lze) を導入。
+
+作業ディレクトリにて、
+
+        wget --output-document=lze_20080228a.lzh 'http://gorry.haun.org/cgitest/download.pl?subject=CGI-DOWNLOAD%20lze_20080228a.lzh&info=readcount&file=lze.html&downfile=lze_20080228a.lzh'
+
+        lha x lze_20080228a.lzh
+
+ソースファイル末尾にある^Zを削除する。
+
+        mv lze.c lze.c.orig
+
+        sed -e '$d' lze.c.orig > lze.c
+
+本リポジトリの`lze/Makefile.gcc`を使ってmakeする。
+
+        make -f Makefile.gcc
+
+パスの通った場所に出来上がった`lze`をコピーするかシンボリックリンクを張っておく。
 
 コマンドラインで `lze` が使えることを確認。
 
-        lze -h
+        lze
 
 6. [ffmpeg](https://ffmpeg.org/) を導入。
 
@@ -100,6 +114,22 @@ Linux/WSL2:
 コマンドラインで `ffmpeg` が使えることを確認。
 
         ffmpeg -h
+
+7. [run68mac](https://github.com/GOROman/run68mac) を導入する。(オリジナルのrun68をWindows専用ではなく、macsOS, Linux, WSL2などでも動作するるようにしたもの) xdev68k クロスコンパイル環境が既に導入されていればスキップ。
+
+8. [HAS060.X](http://retropc.net/x68000/software/develop/as/has060/) をダウンロードし、アクセス可能な位置に置いておく。xdev68k クロスコンパイル環境が既に導入されていればスキップ。
+
+例：
+        /opt/xdev68k/x68k_bin/HAS060.X
+
+9. run68 で HAS060 が使えることを確認。
+
+        $ run68 /opt/xdev68k/x68k_bin/HAS060.X
+        X68k High-speed Assembler v3.09+91 (C) 1990-1994/1996-2023 Y.Nakamura/M.Kamada
+        使用法: has060 [スイッチ] ファイル名
+                -1              絶対ロング→PC間接(-b1と-eを伴う)
+                -8              シンボルの識別長を8バイトにする
+        ...
 
 ---
 
