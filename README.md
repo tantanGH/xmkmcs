@@ -32,15 +32,15 @@ UNIX-Like OSが対象です。CLIなので、コマンドラインのみの操�
 
 ## Install (ホストOS側)
 
-1. Pythonツール `pcm2adpcm` を導入。
+#### Pythonツール `pcm2adpcm` の導入
 
         pip install git+https://github.com/tantanGH/pcm2adpcm.git
 
-コマンドラインで使えることを確認。
+コマンドラインから使えることを確認。
 
         pcm2adpcm -h
 
-2. Pythonツール `gif2tx` を導入。
+#### Pythonツール `gif2tx` の導入
 
         pip install git+https://github.com/tantanGH/gif2tx.git
 
@@ -48,7 +48,7 @@ UNIX-Like OSが対象です。CLIなので、コマンドラインのみの操�
 
         gif2tx -h
 
-3. dos2unix を導入。
+#### dos2unix の導入
 
 macOS:
 
@@ -62,7 +62,7 @@ Linux/WSL2:
 
         unix2dos -h
 
-4. lha を導入。
+#### lha の導入
 
 macOS:
 
@@ -77,7 +77,9 @@ Linux/WSL2:
         lha
 
 
-5. [lze](http://gorry.haun.org/pw/?lze) を導入。
+#### lze の導入
+
+* [lze](http://gorry.haun.org/pw/?lze)
 
 作業ディレクトリにて、
 
@@ -101,7 +103,9 @@ Linux/WSL2:
 
         lze
 
-6. [ffmpeg](https://ffmpeg.org/) を導入。
+#### ffmpeg の導入
+
+* [ffmpeg](https://ffmpeg.org/)
 
 macOS:
 
