@@ -1,4 +1,9 @@
-xmkmcs - マルチコア対応クロスプラットフォームMACS data builder 2023.06.21
+xmkmcs - マルチコア対応クロスプラットフォームMACS data builder 2023.07.12
+
+version 2023.07.12
+- XEiJ 0.23.07.11 を前提としたことで 192MB超の MACSデータが作成可能となった
+- HLK Evo 3.01+18 を前提としたことで makemcs.x が不要になった
+- 一部固定パレットのフレーム番号切り出しのためのツール(xmkview.x)を同梱
 
 version 2023.06.21
 - 100%raw, 100%lze, raw:lze=50:50の選択ができるようにした

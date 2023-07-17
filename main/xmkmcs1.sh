@@ -2,7 +2,7 @@
 #
 #   xmkmcs1.sh - X680x0 MACS data cross builder #1
 #
-#   version 2023.06.23 tantan
+#   version 2023.07.12 tantan
 #
 #   Prerequisites:
 #     - Linux/macOS or similar OS environment (WSL2 on Windows may also work?)
@@ -22,15 +22,6 @@
 #
 
 set -u
-
-python_exec=`which python`
-if [ $? -ne 0 ]; then
-  python_exec=`which python3`
-  if [ $? -ne 0 ]; then
-    echo "python is not installed."
-    exit 1
-  fi
-fi
 
 ffmpeg_exec=`which ffmpeg`
 if [ $? -ne 0 ]; then
@@ -62,14 +53,17 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# gif2tx.py path
-gif2tx=./gif2tx.py
+gif2tx_exec=`which gif2tx`
+if [ $? -ne 0 ]; then
+  echo "gif2tx is not installed."
+  exit 1
+fi
 
-# pcm2adpcm.py path
-pcm2adpcm=./pcm2adpcm.py
-
-# HAS060.X path
-has060=/opt/xdev68k/x68k_bin/HAS060.X 
+pcm2adpcm_exec=`which pcm2adpcm`
+if [ $? -ne 0 ]; then
+  echo "pcm2adpcm is not installed."
+  exit 1
+fi
 
 
 #
@@ -104,7 +98,7 @@ function stage1() {
     exit 1
   fi
 
-  $python_exec $pcm2adpcm $pcm_file2 $adpcm_freq 1 $adpcm_file $adpcm_freq
+  $pcm2adpcm_exec $pcm_file2 $adpcm_freq 1 $adpcm_file $adpcm_freq
   if [ $? != 0 ]; then
     echo "error: adpcm conversion failed."
     exit 1
@@ -128,7 +122,7 @@ function stage2() {
   date
   echo "[STAGE 2] started."
 
-  $python_exec $gif2tx -sw $screen_width -sh $screen_height -vw $view_width -vh $view_height $crop_x $crop_y "$gif_file"
+  $gif2tx_exec -sw $screen_width -sh $screen_height -vw $view_width -vh $view_height $crop_x $crop_y "$gif_file"
   if [ $? != 0 ]; then
     echo "error: gif to tx conversion failed."
     exit 1
@@ -148,7 +142,9 @@ function stage2() {
 #      - tx(raw) files
 #      - tp files
 #
-function stage2a() {
+#    NOTE: in case empty gif is generated, increase end_frame2 offset number from 30 to larger value (i.e. 300)
+#
+function fix_palette() {
 
   start_frame=$1
   end_frame=$2
@@ -169,7 +165,7 @@ function stage2a() {
     exit 1
   fi
 
-  $python_exec $gif2tx -sw $screen_width -sh $screen_height -vw $view_width -vh $view_height $crop_x $crop_y -fs $start_frame -fe $end_frame "_wip_${start_frame}_${end_frame}.gif"
+  $gif2tx_exec -sw $screen_width -sh $screen_height -vw $view_width -vh $view_height $crop_x $crop_y -fs $start_frame -fe $end_frame "_wip_${start_frame}_${end_frame}.gif"
   if [ $? != 0 ]; then
     echo "error: gif to tx conversion failed."
     exit 1
@@ -335,8 +331,11 @@ function stage4() {
 #  main - update the below settings before execution
 #
 
+# HAS060.X path
+has060=/opt/xdev68k/x68k_bin/HAS060.X 
+
 # source movie file
-source_file="../MadokaMagicaOp.m4v"
+source_file="./MadokaMagicaOp.m4v"
 
 # source movie cut start/to timestamps
 #   note: ffmpeg cuts movie at each key frame, so you should set 'rough' time range for these parameters.
@@ -394,11 +393,10 @@ pcm_volume=1.0
 # output ADPCM frequency
 adpcm_freq=15625
 
-# LZE compression (0:no 1:yes 2:raw:lze=50:50 3:raw:lze=60:40)
+# LZE compression (0:no 1:yes 2:raw:lze=50:50)
 #lze_compression=0
 #lze_compression=1
 lze_compression=2
-#lze_compression=3
 
 # temporary gif file name
 gif_file="_wip.gif"
@@ -419,8 +417,8 @@ stage1
 stage2
 
 # STAGE2a (optional for fixed palette)
-#stage2a  808 1048
-#stage2a 1784 1954
+#fix_palette  808 1048
+#fix_palette 1784 1954
 
 # STAGE3 lze
 stage3
