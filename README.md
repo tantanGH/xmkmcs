@@ -118,18 +118,36 @@ Linux/WSL2:
 
         sudo apt-get install ffmpeg
 
+他のツールに比べると規模が大きいので注意。
+
 コマンドラインで `ffmpeg` が使えることを確認。
 
         ffmpeg -h
 
-7. [run68mac](https://github.com/GOROman/run68mac) を導入する。(オリジナルのrun68をWindows専用ではなく、macsOS, Linux, WSL2などでも動作するるようにしたもの) xdev68k クロスコンパイル環境が既に導入されていればスキップ。
 
-8. [HAS060.X](http://retropc.net/x68000/software/develop/as/has060/) をダウンロードし、アクセス可能な位置に置いておく。xdev68k クロスコンパイル環境が既に導入されていればスキップ。
+### run68mac の導入
+
+* [run68mac](https://github.com/GOROman/run68mac) 
+
+オリジナルのrun68.exeと異なり、Windows専用ではなく、macsOS, Linux, WSL2などでも動作するるようにしたもの
+
+リンク先の手順に従い導入する。xdev68k クロスコンパイル環境が既に導入されていれば確認のみで良い。
+
+コマンドラインで `run68` が使えることを確認。
+
+        run68
+
+
+### HAS060 の導入
+
+* [HAS060.X](http://retropc.net/x68000/software/develop/as/has060/) 
+
+HAS060.X をアクセス可能な位置に置いておく。xdev68k クロスコンパイル環境が既に導入されていれば確認のみで良い。
 
 例：
         /opt/xdev68k/x68k_bin/HAS060.X
 
-9. run68 で HAS060 が使えることを確認。
+コマンドラインで HAS060 が使えることを確認。
 
         $ run68 /opt/xdev68k/x68k_bin/HAS060.X
         X68k High-speed Assembler v3.09+91 (C) 1990-1994/1996-2023 Y.Nakamura/M.Kamada
