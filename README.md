@@ -32,7 +32,7 @@ UNIX-Like OSが対象です。CLIなので、コマンドラインのみの操�
 
 ## Install (ホストOS側)
 
-#### Pythonツール `pcm2adpcm` の導入
+#### pcm2adpcm の導入
 
         pip install git+https://github.com/tantanGH/pcm2adpcm.git
 
@@ -40,13 +40,15 @@ UNIX-Like OSが対象です。CLIなので、コマンドラインのみの操�
 
         pcm2adpcm -h
 
-#### Pythonツール `gif2tx` の導入
+
+#### gif2tx の導入
 
         pip install git+https://github.com/tantanGH/gif2tx.git
 
 コマンドラインから使えることを確認。
 
         gif2tx -h
+
 
 #### dos2unix の導入
 
@@ -61,6 +63,7 @@ Linux/WSL2:
 コマンドラインで `unix2dos` が使えることを確認。
 
         unix2dos -h
+
 
 #### lha の導入
 
