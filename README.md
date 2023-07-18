@@ -150,14 +150,14 @@ Linux/WSL2:
 
 #### HAS060 の導入
 
-* [HAS060.X](http://retropc.net/x68000/software/develop/as/has060/) 
+* [HAS060](http://retropc.net/x68000/software/develop/as/has060/) 
 
 HAS060.X をアクセス可能な位置に置いておく。xdev68k クロスコンパイル環境が既に導入されていれば確認のみで良い。
 
 例：
         /opt/xdev68k/x68k_bin/HAS060.X
 
-コマンドラインで HAS060 が使えることを確認。
+run68で HAS060.X が使えることを確認。
 
         $ run68 /opt/xdev68k/x68k_bin/HAS060.X
         X68k High-speed Assembler v3.09+91 (C) 1990-1994/1996-2023 Y.Nakamura/M.Kamada
@@ -165,6 +165,79 @@ HAS060.X をアクセス可能な位置に置いておく。xdev68k クロスコ
                 -1              絶対ロング→PC間接(-b1と-eを伴う)
                 -8              シンボルの識別長を8バイトにする
         ...
+
+---
+
+## Install (68エミュレータ側)
+
+#### XEiJ 0.23.07.12テスト版以上の導入
+
+* [XEiJテスト版](https://stdkmd.net/xeijtest/)
+* [060high](http://retropc.net/x68000/software/hardware/060turbo/060high/)
+
+- ハイメモリ 768MB 設定
+- 機種選択 060turbo 50MHz
+- 同梱されている 060turbo.sys 0.58 を拡張モード(`-ss` `-dv` `-xm`)で組み込む
+- 060high を導入しておく
+- HFSでホストOS側のフォルダが見えるようにしておく
+
+
+#### HAS060.X 3.09+91以上の導入
+
+* [HAS060](http://retropc.net/x68000/software/develop/as/has060/)
+
+
+#### HLK evolution 3.01+18以上の導入
+
+* [HLK evolution](https://github.com/kg68k/hlk-ev)
+
+3.01+18で対応したMACSファイルダイレクト生成オプションを前提としているので、必ずこのバージョン以上を導入する。
+
+
+#### MACSスケジューラ用インクルードファイルの導入
+
+最新のMACSDRV(改造版)に含まれる `macs_sch.h` を環境変数`include`(小文字)で指定したディレクトリにコピーしておく。
+環境変数`HAS`で`-i<ディレクトリ名>`と指定した場所でも良い。
+
+---
+
+## 使い方
+
+1. ホストOS上に作業フォルダを作成する
+
+2. 素材となる動画ファイルを用意する
+
+3. 作業フォルダに以下の3つのファイルをコピーする
+
+- xmkmcs1.sh
+- xmkmcs2.bat
+- schedule.s
+
+このフォルダはXEiJから読み書きアクセスできること。
+
+4. xmkmcs1.sh の編集
+
+スクリプト終盤にある設定パラメータを調整していく。
+
+        # HAS060.X path
+        has060=/opt/xdev68k/x68k_bin/HAS060.X 
+
+ホストOS上に置いた HAS060.X のフルパスを設定する。
+
+        # source movie cut start/to timestamps
+        #   note: ffmpeg cuts movie at each key frame, so you should set 'rough' time range for these parameters.
+        source_cut_ss="-ss 00:02:57.500"
+        source_cut_to="-to 00:04:29.000"
+
+元動画をどの位置から切り出すかを大雑把に指定する。切り出し開始時間および切り出し終了時間をmsecまでの単位で設定。
+実際にはキーフレーム単位での切り出しとなるので厳密にこのタイミングで切り出されるわけではない。
+
+        # source movie cut start offset and length
+        #   note: this is applied AFTER the source movie is cut at key frames.
+        source_cut_offset="-ss 00:00:00.800"
+        source_cut_length="-t  00:01:29.500"
+
+
 
 ---
 
