@@ -148,7 +148,7 @@ Linux/WSL2:
         run68
 
 
-#### HAS060 の導入
+#### HAS060.X の導入
 
 * [HAS060](http://retropc.net/x68000/software/develop/as/has060/) 
 
@@ -173,12 +173,10 @@ run68で HAS060.X が使えることを確認。
 #### XEiJ 0.23.07.12テスト版以上の導入
 
 * [XEiJテスト版](https://stdkmd.net/xeijtest/)
-* [060high](http://retropc.net/x68000/software/hardware/060turbo/060high/)
 
 - ハイメモリ 768MB 設定
 - 機種選択 060turbo 50MHz
 - 同梱されている 060turbo.sys 0.58 を拡張モード(`-ss` `-dv` `-xm`)で組み込む
-- 060high を導入しておく
 - HFSでホストOS側のフォルダが見えるようにしておく
 
 
@@ -192,6 +190,13 @@ run68で HAS060.X が使えることを確認。
 * [HLK evolution](https://github.com/kg68k/hlk-ev)
 
 3.01+18で対応したMACSファイルダイレクト生成オプションを前提としているので、必ずこのバージョン以上を導入する。
+
+
+#### 060highの導入
+
+* [060high](http://retropc.net/x68000/software/hardware/060turbo/060high/)
+
+HLK evolutionがハイメモリを使うために必要
 
 
 #### MACSスケジューラ用インクルードファイルの導入
