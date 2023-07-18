@@ -6,7 +6,7 @@
 
 ## About This
 
-macOS, Linux, WSL2(Windows) など、UNIX-Like OS上でMACSデータを作成するためのテンプレートbashスクリプト+支援ツール群のセット
+macOS, Linux, WSL2(Windows) など、UNIX-Like OS上でMACSデータを作成するためのテンプレートbashスクリプト+支援ツール群のセットです。
 
 - 時間のかかるTx/Tpオブジェクトアセンブル処理をマルチコアで並列実行
 - 90秒のMACSを4分程度で生成(M1 MacBook)
