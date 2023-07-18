@@ -24,13 +24,14 @@ macOS, Linux, WSL2(Windows) など、UNIX-Like OS上でMACSデータを作成す
 
 ## 動作環境
 
-ホストOS側:
+#### ホストOS側
 
 - macOS
 - Linux
-- WSL2 (未確認)
 
-68エミュレータ側(推奨):
+WSL2でも動作するとは思いますが、環境を持っていないため未確認です。
+
+#### 68エミュレータ側
 
 - XEiJ 0.23.07.12以上 ハイメモリ 768MB 060turbo.sys 拡張モード(-ss -dv -xm)
 
