@@ -10,6 +10,16 @@ COMMENT '256x216 256colors variable palette 24.0fps raw:lze=50:50'
 ;COMMENT '384x216 256colors raw'
 ;COMMENT '384x216 256colors lze'
 
+;fps=13.865     # SET_FPS15_X68
+;fps=15.0       # SET_FPS15
+;fps=18.486     # SET_FPS20_X68
+;fps=23.976     # SET_FPS24_NTSC
+;fps=24.0       # SET_FPS24
+;fps=27.729     # SET_FPS30_X68
+;fps=29.97      # SET_FPS30_NTSC
+;fps=30.0       # SET_FPS30
+;fps=55.458     # SET_FPS60_X68
+
 SCREEN_ON_G256
 ;SCREEN_ON_G384
 
