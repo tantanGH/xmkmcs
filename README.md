@@ -125,7 +125,7 @@ Linux/WSL2:
         ffmpeg -h
 
 
-### run68mac の導入
+#### run68mac の導入
 
 * [run68mac](https://github.com/GOROman/run68mac) 
 
@@ -138,7 +138,7 @@ Linux/WSL2:
         run68
 
 
-### HAS060 の導入
+#### HAS060 の導入
 
 * [HAS060.X](http://retropc.net/x68000/software/develop/as/has060/) 
 
