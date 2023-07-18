@@ -128,19 +128,17 @@ Linux/WSL2:
 
         sudo apt-get install ffmpeg
 
-他のツールに比べると規模が大きいので注意。
+他のツールに比べると規模が大きいので注意。ラズパイOSの場合バージョンによってはエラーになるかも。
 
 コマンドラインで `ffmpeg` が使えることを確認。
 
         ffmpeg -h
 
-
 #### run68mac の導入
 
 * [run68mac](https://github.com/GOROman/run68mac) 
 
-オリジナルのrun68.exeと異なり、Windows専用ではなく、macsOS, Linux, WSL2などでも動作するるようにしたもの
-
+オリジナルのrun68.exeと異なり、Windows専用ではなく、macsOS, Linux, WSL2などでも動作するるようにしたもの。
 リンク先の手順に従い導入する。xdev68k クロスコンパイル環境が既に導入されていれば確認のみで良い。
 
 コマンドラインで `run68` が使えることを確認。
