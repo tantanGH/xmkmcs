@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#   xmkmcs1.sh - X680x0 MACS data cross builder #1
+#   X680x0 MACS animation data cross build system
 #
 #   version 2023.07.19 tantan
 #
