@@ -488,6 +488,8 @@ XEiJ 060turbo ハイメモリ拡張モードで xmkmcs2.bat を実行する。
 
 フレーム番号を画面サムネイルを見ながら指定していくには、一度 xmkmcs1.sh を実行した後に、付属の xmkview.x を68エミュレータ上で作業ディレクトリで実行すると比較的簡単に可能。
 
+<img src='images/xmkmcs5.png' width='800px'/>
+
 ---
 
 ## 変更履歴
