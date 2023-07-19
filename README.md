@@ -142,7 +142,7 @@ Linux/WSL2:
 
 * [run68mac](https://github.com/GOROman/run68mac) 
 
-オリジナルのrun68.exeと異なり、Windows専用ではなく、macsOS, Linux, WSL2などでも動作するるようにしたもの。
+オリジナルのrun68.exeと異なり、Windows専用ではなく、macsOS, Linux, WSL2などでも動作するようにしたもの。
 リンク先の手順に従い導入する。xdev68k クロスコンパイル環境が既に導入されていれば確認のみで良い。
 
 コマンドラインで `run68` が使えることを確認。
