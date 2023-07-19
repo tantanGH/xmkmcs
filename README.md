@@ -229,6 +229,13 @@ HLK evolutionがハイメモリを使うために必要
 
 ホストOS上に置いた HAS060.X のフルパスを設定する。
 
+
+        # source movie file
+        source_file="./MadokaMagicaOp.m4v"
+
+入力となる動画データファイルのパス名を指定する。
+
+
         # source movie cut start/to timestamps
         #   note: ffmpeg cuts movie at each key frame, so you should set 'rough' time range for these parameters.
         source_cut_ss="-ss 00:02:57.500"
@@ -237,16 +244,245 @@ HLK evolutionがハイメモリを使うために必要
 元動画をどの位置から切り出すかを大雑把に指定する。切り出し開始時間および切り出し終了時間をmsecまでの単位で設定。
 実際にはキーフレーム単位での切り出しとなるので厳密にこのタイミングで切り出されるわけではない。
 
+
         # source movie cut start offset and length
         #   note: this is applied AFTER the source movie is cut at key frames.
         source_cut_offset="-ss 00:00:00.800"
         source_cut_length="-t  00:01:29.500"
 
+大雑把に切り出された後に厳密に切り出しを開始するオフセット位置をmsec単位で指定する。また、切り出しの長さを同様に指定する。
+元動画の一部を切り出す場合は何度か微調整が必要かも。
 
+
+        # macs fps
+        #fps=13.865     # SET_FPS15_X68
+        #fps=15.0       # SET_FPS15
+        #fps=18.486     # SET_FPS20_X68
+        #fps=23.976     # SET_FPS24_NTSC
+        fps=24.0       # SET_FPS24
+        #fps=27.729     # SET_FPS30_X68
+        #fps=29.97      # SET_FPS30_NTSC
+        #fps=30.0       # SET_FPS30
+        #fps=55.458     # SET_FPS60_X68
+
+生成するMACSデータのfpsを指定する。いずれかをコメントアウトする。
+
+
+        # use variable palette or fixed palette
+        #variable_palette=0
+        variable_palette=1
+
+可変パレット(フレーム1枚ごとに256色パレットを新たに定義しなおす)の場合は1、固定パレット(切り出した動画全体を通して256色パレットを固定する)場合は0を指定する。基本的には1を選択し、画面全体があまり動かないもの、ゲーム動画素材などは0が良い場合が多い。また後述する機能を使って特定フレーム間のみ固定とすることも可能。この場合は1を選択しておく。
+
+
+        # macs screen size (384x256 or 256x256)
+        #screen_width=384
+        screen_width=256
+        screen_height=256
+
+画面モードを選択する。現時点でサポートされているのは384x256または256x256のみ。screen_widthはどちらかをコメントアウトする。
+
+
+        # macs view size (must be within the screen size)
+        #view_width=384
+        view_width=256
+        #view_height=256
+        view_height=216
+
+実際に表示を行うサイズを指定する。横は一つ前の画面モードに合わせる。縦は4:3ソースなら256、16:9ソースであれば216を基本とするが、必要に応じて調整する。216だとやや縦長になる。また、数値が少ない方が描画ラインを減らすことができるのでフレーム落ちが減る。208,200,192なども選択肢に入れる。
+
+
+        # crop offset (optional, in case you want to crop certain part of the source movie frame)
+        #crop_x="-cx 0"
+        #crop_y="-cy 0"
+        crop_x=
+        crop_y=
+
+ソース動画のフレームの一部分を切り出したい時にオフセット位置の指定に使うことができるが、とりあえず設定不要。
+
+
+        # dither options (0-5, 0:more grains 5:more bands)
+        bayer_scale=4
+        #bayer_scale=5
+
+減色時のディザのかけ具合を決める。数値が小さいほどグレインが目立つようになる。推奨値は4だが、実際の絵を見て調整していく。
+5にするとほぼディザなしとなる。バンディングが目立つようになるが、ゲーム素材などはこちらの方が良い場合が多い。
+
+
+        # output PCM frequency (48000/44100/22050)
+        #pcm_freq=48000
+        #pcm_freq=44100
+        pcm_freq=22050
+
+出力する16bitPCMのサンプリング周波数を48kHz, 44.1kHz, 22.05kHzの中から選択する。
+
+
+        # output PCM volume ratio
+        pcm_volume=1.0
+
+出力するPCMのボリュームをソースに対する比率で指定する。あまり大きくするとレベルオーバーになるので注意。
+ADPCMデータ生成時に平均レベル・ピークレベルの簡易チェックを行い、推奨レンジに入っていない場合はエラーとなり処理が中断する。
+
+
+        # output ADPCM frequency
+        adpcm_freq=15625
+
+出力するADPCMの周波数を指定する。変更の必要なし。
+
+
+        # LZE compression (0:no 1:yes 2:raw:lze=50:50)
+        #lze_compression=0
+        #lze_compression=1
+        lze_compression=2
+
+画像圧縮方式を3通りから選ぶ。0だと無圧縮、1だと全フレームLZE圧縮、2だと無圧縮とLZE圧縮を交互に使う。
+
+
+        # temporary gif file name
+        gif_file="_wip.gif"
+
+        # temporary 16bit pcm file name
+        pcm_file="_wip_pcm.dat"
+
+        # temporary 16bit pcm file name 2 (for adpcm conversion)
+        pcm_file2="_wip_pcm2.dat"
+
+        # temporary adpcm file name
+        adpcm_file="_wip_adpcm.dat"
+
+特に変更の必要なし。
+
+
+5. xmkmcs1.sh の実行
+
+すべてのパラメータの設定が終わったらxmkmcs1.shを実行する。
+
+        ./xmkmcs1.sh
+
+
+6. schedule.s の編集
+
+schedule.s を編集する。ホストOS側、68エミュレータ側からのどちらでも良いが、SJIS,CRLFで行うこと。
+
+        .include macs_sch.h
+
+        SET_OFFSET
+
+変更不要。
+
+
+        ;USE_DUALPCM 'S48'
+        ;USE_DUALPCM 'S44'
+        USE_DUALPCM 'S22'		
+
+16bitPCMの出力周波数を指定する。xmkmcs1.sh の設定と合わせること。
+
+
+        TITLE   'MACS sample'
+        COMMENT '256x216 256colors variable palette 24.0fps raw:lze=50:50'
+
+タイトルとコメントを設定する。
+
+
+        ;SCREEN_ON_G384
+        SCREEN_ON_G256
+
+画面モードの横幅を設定する。xmkmcs1.sh の設定と合わせること。
+
+
+        ;SET_FPS15_X68
+        ;SET_FPS15
+        ;SET_FPS20_X68
+        ;SET_FPS24_NTSC
+        SET_FPS24
+        ;SET_FPS30_X68
+        ;SET_FPS30_NTSC
+        ;SET_FPS30
+        ;SET_FPS60_X68
+
+fpsを設定する。xmkmcs1.sh の設定と合わせること。
+
+
+        ;SET_VIEWAREA_Y 256
+        SET_VIEWAREA_Y 216
+
+有効表示縦ライン数を指定する。xmkmcs1.sh の設定と合わせること。
+
+
+        DRAW_DATA_RP 10000
+
+        ;PCM_PLAY_S48 pcmdat,pcmend-pcmdat
+        ;PCM_PLAY_S44 pcmdat,pcmend-pcmdat
+        PCM_PLAY_S22 pcmdat,pcmend-pcmdat
+        PCM_PLAY_SUBADPCM adpcmdat,adpcmend-adpcmdat
+
+16bitPCM再生周波数に応じて設定する。
+
+
+        ; set last frame index at the 2nd argument
+        DRAW_DATA 10001,12345
+
+        WAIT 60
+        PCM_STOP
+
+        EXIT
+
+DRAW_DATA の第2引数は、xmkmcs1.sh の最後に出力された最終フレームNo.を設定する。
+
+
+7. xmkmcs2.bat の編集
+
+xmkmcs2.bat を編集する。ホストOS側、68エミュレータ側からのどちらでも良いが、SJIS,CRLFで行うこと。
+
+        set MACS_NAME=sample1
+
+出力するMCSファイルの主ファイル名を設定する。
+
+
+        has060 -l -t . -u schedule.s
+
+変更の必要なし。
+
+
+        060high 1
+        hlk.r --makemcs -t -o %MACS_NAME%.MCS schedule listpcm im00/list00 im01/list01 im02/list02 im03/list03 im04/list04
+        060high 0
+
+xmkmcs1.shの出力結果を見て、hlk.r の引数の imXX/listXX を必要に応じて追加(削除)する。
+
+
+8. xmkmcs2.bat の実行
+
+XEiJ 060turbo ハイメモリ拡張モードで xmkmcs2.bat を実行する。
+
+以上。
+
+---
+
+## 一部固定パレットの指定方法
+
+完全可変パレットにした時画面のチラつきが気になる場合は、シーン単位でパレットを固定することが可能。
+この際に固定開始フレーム番号と固定終了フレーム番号を xmkmcs1.sh の中で以下のようにstage2とstage3の間で指定する。
+
+
+        # STAGE2 gif2tx
+        stage2
+
+        # STAGE2a (optional for fixed palette)
+        fix_palette  808 1048
+        fix_palette 1784 1954
+
+        # STAGE3 lze
+        stage3
+
+フレーム番号を画面サムネイルを見ながら指定していくには、一度 xmkmcs1.sh を実行した後に、付属の xmkview.x を68エミュレータ上で作業ディレクトリで実行すると比較的簡単に可能。
 
 ---
 
 ## 変更履歴
+
+version 2023.07.19
+- ドキュメント更新
 
 version 2023.07.12
 - XEiJ 0.23.07.11 を前提としたことで 192MB超の MACSデータが作成可能となった

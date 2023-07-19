@@ -370,6 +370,7 @@ screen_height=256
 # macs view size (must be within the screen size)
 #view_width=384
 view_width=256
+#view_height=256
 view_height=216
 
 # crop offset (optional, in case you want to crop certain part of the source movie frame)
