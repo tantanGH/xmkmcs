@@ -20,6 +20,8 @@ macOS, Linux, WSL2(Windows) など、UNIX-Like OS上でMACSデータを作成す
 
 手元の環境(M1 MacBook)だと、約4分ほどで90秒のMACSデータの生成が可能です。
 
+<img src='images/xmkmcs1.png' width='800'/>
+
 ---
 
 ## 動作環境
