@@ -2,23 +2,7 @@
 #
 #   xmkmcs1.sh - X680x0 MACS data cross builder #1
 #
-#   version 2023.07.12 tantan
-#
-#   Prerequisites:
-#     - Linux/macOS or similar OS environment (WSL2 on Windows may also work?)
-#     - xdev68k environment (bash, HAS060.X on run68)
-#     - ffmpeg
-#     - unix2dos (dos2unix)
-#     - lze
-#     - macs_sch.h
-#
-#   How to use:
-#     1. Create a new project folder.
-#     2. Copy xmkmcs1.sh, gif2tx.py, pcm2adpcm.py, xmkmcs2.bat, macs_sch.h to the folder.
-#     3. Edit paramters in xmkmcs1.sh.
-#     4. Run xmkmcs1.sh.
-#     5. Update macssrc.s on XEiJ.
-#     6. Run xmkmcs2.bat on XEiJ 060turbo mode. (060turbo.sys -xm with 256MB high memory)
+#   version 2023.07.19 tantan
 #
 
 set -u
