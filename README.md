@@ -20,7 +20,7 @@ macOS, Linux, WSL2(Windows) など、UNIX-Like OS上でMACSデータを作成す
 
 手元の環境(M1 MacBook)だと、約4分ほどで90秒のMACSデータの生成が可能です。
 
-<img src='images/xmkmcs1.png' width='800'/>
+<img src='images/xmkmcs4.png' width='800'/>
 
 ---
 
@@ -361,6 +361,8 @@ ADPCMデータ生成時に平均レベル・ピークレベルの簡易チェッ
 
         ./xmkmcs1.sh
 
+<img src='images/xmkmcs2.png' width='800'/>
+
 
 6. schedule.s の編集
 
@@ -456,6 +458,13 @@ xmkmcs1.shの出力結果を見て、hlk.r の引数の imXX/listXX を必要に
 8. xmkmcs2.bat の実行
 
 XEiJ 060turbo ハイメモリ拡張モードで xmkmcs2.bat を実行する。
+
+
+<img src='images/xmkmcs3.png' width='800'/>
+
+
+<img src='images/xmkmcs4.png' width='800'/>
+
 
 以上。
 
