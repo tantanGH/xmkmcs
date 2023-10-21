@@ -2,50 +2,79 @@
 
 SET_OFFSET
 
-;USE_DUALPCM 'S48'
+;
+;  16bit PCM format
+;
+USE_DUALPCM 'S48'
 ;USE_DUALPCM 'S44'
-USE_DUALPCM 'S22'		
+;USE_DUALPCM 'S22'
 
-TITLE   'MACS sample'
-COMMENT '256x216 256colors variable palette 24.0fps raw:lze=50:50'
+;
+;  title
+;
+TITLE   'xxxxxxxxx'
 
-;SCREEN_ON_G384
-SCREEN_ON_G256
+;
+;  comment
+;
+COMMENT '384x200 256êF 24.0fps raw'
 
-;SET_FPS15_X68
-;SET_FPS15
-;SET_FPS20_X68
-;SET_FPS24_NTSC
-SET_FPS24
-;SET_FPS30_X68
-;SET_FPS30_NTSC
-;SET_FPS30
-;SET_FPS60_X68
+;
+;  screen mode
+;
+SCREEN_ON_G384
+;SCREEN_ON_G256
 
-;fps=13.865     # SET_FPS15_X68
-;fps=15.0       # SET_FPS15
-;fps=18.486     # SET_FPS20_X68
-;fps=23.976     # SET_FPS24_NTSC
-;fps=24.0       # SET_FPS24
-;fps=27.729     # SET_FPS30_X68
-;fps=29.97      # SET_FPS30_NTSC
-;fps=30.0       # SET_FPS30
-;fps=55.458     # SET_FPS60_X68
+;
+;  FPS generic
+;
+SET_FPS24	; 24.000
+;SET_FPS24_NTSC	; 23.976
+;SET_FPS30_NTSC	; 29.970
 
-SET_VIEWAREA_Y 216
+;
+;  FPS for 256 mode (vsync 55.458Hz)
+;
+;SET_FPS15_X68  ; 15fps (13.865)
+;SET_FPS20_X68  ; 20fps (18.486)
+;SET_FPS 22183  ; 24fps (22.183)
+;SET_FPS30_X68  ; 30fps (27.729)
+
+;
+;  FPS for 384 mode (vsync 56.272Hz)
+;
+;SET_FPS 14068  ; 15fps (14.068)
+;SET_FPS 18757  ; 20fps (18.757)
+;SET_FPS 22509  ; 24fps (22.509)
+;SET_FPS 28136  ; 30fps (28.136)
+
+;
+;  view area size
+;
 ;SET_VIEWAREA_Y 256
+SET_VIEWAREA_Y 200
 
+;
+;  draw 1st frame
+;
 DRAW_DATA_RP 10000
 
-;PCM_PLAY_S48 pcmdat,pcmend-pcmdat
+;
+;  start PCM playback
+;
+PCM_PLAY_S48 pcmdat,pcmend-pcmdat
 ;PCM_PLAY_S44 pcmdat,pcmend-pcmdat
-PCM_PLAY_S22 pcmdat,pcmend-pcmdat
+;PCM_PLAY_S42 pcmdat,pcmend-pcmdat
 PCM_PLAY_SUBADPCM adpcmdat,adpcmend-adpcmdat
 
-; set last frame index at the 2nd argument
-DRAW_DATA 10001,12145
+;
+;  draw frames
+;
+DRAW_DATA 10001,19999
 
+;
+;  finish and exit
+;
 WAIT 60
 PCM_STOP
-
 EXIT
