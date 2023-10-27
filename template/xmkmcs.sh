@@ -41,7 +41,7 @@ fps=24.0        # SET_FPS24
 #
 #fps=14.068     # SET_FPS 14068 (15fps)
 #fps=18.757     # SET_FPS 18757 (20fps)
-#fps=22.509     # SET_FPS 22183 (24fps)
+#fps=22.509     # SET_FPS 22509 (24fps)
 #fps=28.136     # SET_FPS 28136 (30fps)
 
 #
