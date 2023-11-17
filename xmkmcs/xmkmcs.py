@@ -287,7 +287,7 @@ def stage2(src_file, src_cut_ofs, src_cut_len, fps, num_colors, variable_palette
 #
 #  stage 3 bmp to tx (32768/65536 colors)
 #
-def stage3(output_bmp_dir, num_colors, screen_width, view_width, view_height):
+def stage3(output_bmp_dir, num_colors, screen_width, view_width, view_height, lze_compression):
 
   print("[STAGE 3] started.")
 
@@ -364,6 +364,9 @@ def stage3(output_bmp_dir, num_colors, screen_width, view_width, view_height):
       with open(plt_file_name, "wb") as f:
         f.write(tp64k_bytes)
 
+      if lze_compression:
+        system(f"lze e {grm_file_name} {grm_file_name}.lze")
+
       print(".", end="", flush=True)
       written_frames += 1
 
@@ -388,6 +391,7 @@ def main():
   parser.add_argument("-cl", "--src_cut_len", help="source cut length", default="01:00:00.000")
   parser.add_argument("-nc", "--num_colors", help="number of colors", type=int, default=65536, choices=[256, 32768, 65536])
   parser.add_argument("-vp", "--variable_palette", help="use variable palette", action='store_true')
+  parser.add_argument("-lz", "--lze_compression", help="use lze compression", action='store_true')
   parser.add_argument("-sw", "--screen_width", help="screen width", type=int, default=256, choices=[256, 384])
   parser.add_argument("-vw", "--view_width", help="view width", type=int, default=180)
   parser.add_argument("-vh", "--view_height", help="view height", type=int, default=140)
@@ -424,7 +428,7 @@ def main():
     return 1
 
   if stage3(output_bmp_dir, args.num_colors, \
-            args.screen_width, args.view_width, args.view_height):
+            args.screen_width, args.view_width, args.view_height, args.lze_compression):
     return 1
 
 #  if pcm_wip_file:
