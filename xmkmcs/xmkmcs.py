@@ -365,7 +365,7 @@ def stage3(output_bmp_dir, num_colors, screen_width, view_width, view_height, lz
         f.write(tp64k_bytes)
 
       if lze_compression:
-        system(f"lze e {grm_file_name} {grm_file_name}.lze")
+        os.system(f"lze e {grm_file_name} {grm_file_name}.lze")
 
       print(".", end="", flush=True)
       written_frames += 1
